@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Enforcement: Android Lint checks this file in `check` (task lintDebug) and in the android-static-analysis job of CI (ADR-0006); the job first runs on the first pull request after the repository is published, and review is the check until then.
+  Cleartext traffic is turned off for every domain. The platform default for cleartext traffic depends on the app's target
+  API level, so the file states it. A domain exception needs a decision record.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false" />
+</network-security-config>

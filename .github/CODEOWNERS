@@ -1,0 +1,21 @@
+# Who reviews which paths. The last matching pattern wins, so the catch-all comes first.
+# Owners are organization teams, one per role branch. Before publishing, replace <org> and each <team-...> with the real slugs (docs/operations/GITHUB_SETUP.md, step 3). Each team needs write access to the repository.
+# Each area lists its own role's team first and the backup lead's team second, so a lead's own PR can still get a code-owner review from the other team.
+# @CivicWindow/ai-ml = AI/ML lead's team
+# @CivicWindow/android = Android/Product lead's team
+# @CivicWindow/data-platform = Data Integration/Platform lead's team
+
+# Shared foundation and everything not listed below: all three teams
+*                     @CivicWindow/ai-ml @CivicWindow/android @CivicWindow/data-platform
+
+# AI/ML; backup Android/Product
+/modules/ai/          @CivicWindow/ai-ml @CivicWindow/android
+/ml/                  @CivicWindow/ai-ml @CivicWindow/android
+
+# Android/Product; backup AI/ML
+/app/                 @CivicWindow/android @CivicWindow/ai-ml
+/modules/android/     @CivicWindow/android @CivicWindow/ai-ml
+
+# Data Integration/Platform; backup Android/Product
+/modules/data/        @CivicWindow/data-platform @CivicWindow/android
+/connectors/          @CivicWindow/data-platform @CivicWindow/android

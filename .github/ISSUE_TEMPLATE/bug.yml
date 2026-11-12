@@ -1,0 +1,73 @@
+name: Bug
+description: Something doesn't work as specified.
+title: "[Bug]: "
+labels: ["type: bug"]
+body:
+  - type: dropdown
+    id: role
+    attributes:
+      label: Role
+      options:
+        - AI/ML
+        - Android/Product
+        - Data Integration/Platform
+        - Shared foundation
+    validations:
+      required: true
+  - type: input
+    id: module
+    attributes:
+      label: Feature or module
+      description: The path it touches, such as modules/android/onboarding
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual result
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Device, OS and build
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: How we know this ticket is complete. One check per line.
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: Definition of done
+      description: The evidence needed. See governance/DEFINITION_OF_DONE.md.
+    validations:
+      required: true
+  - type: input
+    id: baseline
+    attributes:
+      label: Baseline
+      description: The dev commit or tag this work starts from.
+  - type: textarea
+    id: prerequisites
+    attributes:
+      label: Prerequisites or blocked by
+      description: Issues this depends on (#n), or "none".
+  - type: textarea
+    id: contracts
+    attributes:
+      label: Contracts or schemas affected
+      description: Paths under contracts/ or schemas/, or "none". A change here needs review from the affected roles.
+  - type: textarea
+    id: verification
+    attributes:
+      label: How it's verified
+      description: The checks or tests, and on which device if it matters.

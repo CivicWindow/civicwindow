@@ -1,0 +1,25 @@
+# Enforcement: the python-checks job of CI runs Ruff and pytest; it first runs on the first pull request after the repository is published, and review is the check until then. Ruff reads this file and fails on an unknown setting.
+#
+# One shared configuration for every Python file in ml/ and scripts/ (ADR-0005, ADR-0008).
+# Standards: PEP 8 (https://peps.python.org/pep-0008/), PEP 257 (https://peps.python.org/pep-0257/),
+# Ruff settings (https://docs.astral.sh/ruff/settings/) and rules (https://docs.astral.sh/ruff/rules/).
+# Versions: Ruff 0.17.4, checked again at the first run of the Python job in CI.
+
+# 88 columns is Ruff's default. PEP 8 lets a project's own guide take precedence; the project
+# keeps the tool's default so that this file stays small.
+line-length = 88
+
+# Python 3.12 only (ADR-0005).
+target-version = "py312"
+
+[lint]
+# Rule families, each tied to a standard:
+#   E, W  pycodestyle: PEP 8 layout and whitespace
+#   N     pep8-naming: PEP 8 naming
+#   D     pydocstyle: PEP 257 docstrings, and the project rule of a docstring on every public function
+#   I     isort: import order, as PEP 8 describes imports
+select = ["E", "W", "N", "D", "I"]
+
+[lint.pydocstyle]
+# Use the PEP 257 conventions, so the docstring rules match the standard and no other style guide.
+convention = "pep257"

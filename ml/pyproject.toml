@@ -1,0 +1,44 @@
+# Enforcement: the python-checks job of CI runs Ruff and pytest; it first runs on the first pull request after the repository is published, and review is the check until then. A TOML parser reads this file, and uv rejects a malformed project table.
+#
+# Standards: the [project] table follows PEP 621 (https://peps.python.org/pep-0621/);
+# the version limit is a PEP 440 specifier (https://peps.python.org/pep-0440/);
+# the dependency group follows PEP 735 (https://peps.python.org/pep-0735/);
+# the pytest table follows the pytest configuration page (https://docs.pytest.org/en/stable/reference/customize.html).
+#
+# Versions are the proposed baselines of the Python environment record (ADR-0008), checked again at the first run of the Python job in CI.
+
+[project]
+name = "civicwindow-ml"
+version = "0.1.0"
+description = "Development-time ML tooling for CivicWindow: taxonomy, datasets, preprocessing, training, evaluation and conversion."
+readme = "README.md"
+# Python 3.12 only (ADR-0005). "==3.12.*" admits no other minor version.
+requires-python = "==3.12.*"
+# No training library yet: the first training ticket adds them, and the lock file pins them then.
+dependencies = []
+
+[dependency-groups]
+# Development tools only. uv installs the "dev" group by default.
+# coverage and pytest-cov measure test coverage (ADR-0009). pytest-cov's required Python and pytest
+# versions are not confirmed by the saved documentation; the first run of the Python job checks them.
+dev = [
+    "ruff==0.17.4",
+    "pytest==9.2.0",
+    "coverage==7.17.2",
+    "pytest-cov==7.1.0",
+]
+
+[tool.pytest.ini_options]
+# Tests live in ml/tests; the project's choice (no standard covers the folder name).
+testpaths = ["tests"]
+
+[tool.coverage.run]
+# Branch coverage is switched on (the coverage.py documentation turns it on with the --branch flag).
+# source is left unset until ml/ holds code. open: the table and key names follow the coverage.py
+# configuration reference as understood at writing and are checked again at the first run.
+branch = true
+
+[tool.coverage.report]
+# Coverage is measured and reported, with no failing threshold (ADR-0009): no standard covers a
+# threshold, it is the project's choice. There is no fail_under.
+show_missing = true

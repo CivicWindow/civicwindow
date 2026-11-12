@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Enforcement: Android Lint checks the resources in `check` (task lintDebug) and in the android-static-analysis job of CI (ADR-0006); the job first runs on the first pull request after the repository is published, and review is the check until then. -->
+<resources>
+    <!-- A platform theme without an action bar. The app has no launcher icon yet. -->
+    <style name="Theme.CivicWindow" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>

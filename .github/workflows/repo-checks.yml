@@ -1,0 +1,80 @@
+# Enforcement: this workflow is the check. The job commit-messages is a required status check
+# on pull requests into dev and main once the repository settings select it. The job
+# commit-format is advisory: it is not a required check, so a format finding never blocks a
+# merge. Review is the check for this file until its first run in CI.
+# Documentation: GitHub Actions, "Workflow syntax for GitHub Actions" and "Security hardening
+# for GitHub Actions" (a read-only token, actions pinned by full commit id); Conventional
+# Commits 1.0.0; the Commit messages section of CONTRIBUTING.md and the branching policy.
+#
+# Both jobs run scripts/validation/check_commit_messages.py over the commits of the event:
+#   commit-messages  the closing-keyword rule only (a closing keyword is written only in the
+#                    integration pull request into dev)
+#   commit-format    the format rule (type list, first-line length, body wrapping)
+# open: the commit range of each event, the input names of the actions and the runner image
+# name are confirmed at the first CI run. A push of a new branch, or a manual start, checks
+# only the last commit.
+
+name: Repository checks
+
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+
+# Read-only token for every job. No secret is used anywhere in this file.
+permissions:
+  contents: read
+
+# One run per workflow and ref; a newer run cancels an older one for pull requests only.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  commit-messages:
+    name: commit-messages
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # The full history is needed to read the commits of the range.
+      - name: Check out the repository with its history
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python from the pinned version file
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version-file: .python-version
+
+      # The commit ids reach the script through the environment; no title, body or branch
+      # name is used in a command.
+      - name: Refuse a closing keyword in a commit message
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+        run: python scripts/validation/check_commit_messages.py --rule closing-keyword "$BASE_SHA" "$HEAD_SHA"
+
+  commit-format:
+    name: commit-format
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out the repository with its history
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python from the pinned version file
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version-file: .python-version
+
+      # Advisory: this job reports format findings and is not a required check.
+      - name: Report format findings in commit messages
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+        run: python scripts/validation/check_commit_messages.py --rule format "$BASE_SHA" "$HEAD_SHA"

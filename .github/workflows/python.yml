@@ -1,0 +1,69 @@
+# Enforcement: this workflow is the check. The job python-checks is a required status check
+# on pull requests into dev and main once the repository settings select it; review is the
+# check for this file until its first run in CI.
+# Documentation: GitHub Actions, "Workflow syntax for GitHub Actions" and "Security hardening
+# for GitHub Actions" (a read-only token, actions pinned by full commit id); uv, "Locking and
+# syncing"; Ruff; pytest.
+#
+# The Python checks: the lock file is current, Ruff passes on the ML folder and the scripts
+# folder, and pytest passes. Everything is checked again at the first CI run.
+# open: the input names of the actions, the runner image name and the uv option names follow
+# their documentation as understood at writing; they are confirmed at the first CI run.
+
+name: Python
+
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+
+# Read-only token for every job. No secret is used anywhere in this file.
+permissions:
+  contents: read
+
+# One run per workflow and ref; a newer run cancels an older one for pull requests only.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  python-checks:
+    name: python-checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: ml
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Python from the pinned version file
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version-file: .python-version
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          # The uv version that ml/README.md names.
+          version: "0.13.7"
+
+      # Fails when pyproject.toml changed without a new uv.lock; nothing is resolved here.
+      - name: Install from the lock file
+        run: uv sync --locked
+
+      - name: Ruff check
+        run: uv run ruff check . ../scripts
+
+      - name: Ruff format check
+        run: uv run ruff format --check . ../scripts
+
+      # Measured and reported; there is no coverage threshold.
+      - name: Tests of the ML folder, with coverage
+        run: uv run pytest --cov --cov-branch --cov-report=term-missing
+
+      - name: Tests of the validation scripts
+        run: uv run pytest ../scripts/validation/tests

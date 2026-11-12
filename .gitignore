@@ -1,0 +1,64 @@
+# Generated outputs and local build state
+/dist/
+**/build/
+.gradle/
+.idea/
+*.iml
+local.properties
+
+# Private configuration and local environments
+.venv/
+__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
+*.keystore
+*.jks
+
+# Large training/model outputs; retain approved manifests separately
+/ml/datasets/raw/
+/ml/checkpoints/
+*.tflite
+*.onnx
+*.safetensors
+*.pth
+*.pt
+
+# Android distributions
+*.aab
+*.apk
+
+# Android Studio, Gradle and Kotlin local state
+.kotlin/
+captures/
+.externalNativeBuild/
+.cxx/
+*.hprof
+.vscode/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Python environments, caches and test output
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+*.egg-info/
+.ipynb_checkpoints/
+
+# Signing and secrets (docs/security/README.md)
+# A file that must be committed despite these names gets an explicit "!" line and a reason.
+keystore.properties
+signing.properties
+secrets.properties
+*.p12
+*.pem
+*.key
+
+# Logs
+*.log

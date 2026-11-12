@@ -1,0 +1,15 @@
+# Enforcement: the `secret-scan` workflow (.github/workflows/secret-scan.yml) passes this file to Gitleaks on every pull request and push; a TOML parser reads it first. Until the first CI run, review is the check.
+#
+# Configuration for the Gitleaks command-line program (https://github.com/gitleaks/gitleaks).
+# `useDefault = true` extends the default rules built into the program. The program's documentation says
+# `useDefault` and `path` cannot be used together, so this file sets no `path`.
+#
+# There is no allowlist: no path, file or value is excluded from the scan. Add an entry only when a real
+# test fixture or example file needs one, and write the reason on the line above the entry. No entry may hide a
+# real-looking value. Which paths an allowlist may name is the project's choice; no standard covers this.
+# The documentation read for this file does not describe the allowlist format, so confirm it against the
+# program's documentation when the first entry is needed.
+# Checked again at the first CI run, with Gitleaks v8.30.1.
+
+[extend]
+useDefault = true

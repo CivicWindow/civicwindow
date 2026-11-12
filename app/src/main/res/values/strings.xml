@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Enforcement: Android Lint checks the resources in `check` (task lintDebug) and in the android-static-analysis job of CI (ADR-0006); the job first runs on the first pull request after the repository is published, and review is the check until then. -->
+<resources>
+    <string name="app_name">CivicWindow</string>
+</resources>

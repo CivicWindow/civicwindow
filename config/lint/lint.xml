@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Enforcement: Android Lint reads this file through the lint options in civicwindow.lint and fails the
+  build on the two checks below (task lintDebug, run by check). Review is the check for this file's
+  content until the first CI run.
+  Documentation: Android Lint, "Configure lint checks" (the lint.xml file and issue severities).
+  The levels these checks guard are the project's SDK levels, declared once in the version catalog.
+  open: both check ids come from general knowledge of the Android Lint documentation and are not checked
+  against it; they are checked again at the first build. The target level (36) is below the compile level
+  (37), so the first build also shows whether the out-of-date check fires on the current levels.
+-->
+<lint>
+    <!-- Out-of-date target SDK: the target level is behind the newest level Lint knows about. -->
+    <issue id="OldTargetApi" severity="fatal" />
+    <!-- Expired target SDK: the target level no longer meets the store's requirement for apps. -->
+    <issue id="ExpiredTargetSdkVersion" severity="fatal" />
+</lint>

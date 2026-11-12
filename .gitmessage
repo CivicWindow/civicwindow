@@ -1,0 +1,11 @@
+# <type>(<scope>): <summary>
+# First line: at most 72 characters, imperative, lower case, no full stop.
+# Types: feat, fix, docs, refactor, test, build, ci, chore
+#
+# Body: what changed and why. Wrap at 72 characters.
+#
+# Footer:
+# BREAKING CHANGE: <what breaks and how to adapt> (also put ! before the colon)
+# Refs #<n> (optional; the closing keyword belongs in the integration pull request into dev, not in a commit)
+#
+# Enforcement: checked in pull-request review; the commit-messages and commit-format jobs check commit messages in continuous integration, and they first run on the first pull request after the repository is published.

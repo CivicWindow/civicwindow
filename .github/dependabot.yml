@@ -1,0 +1,70 @@
+# Dependency update automation (GitHub Dependabot version updates).
+# Updates are opened as pull requests into `dev`, as integration pull requests,
+# because a dependency version is shared by every role (governance/BRANCHING_POLICY.md).
+# Every version is written once, in the Gradle version catalog (docs/adr/0007-module-and-build-structure.md).
+# Majors of the Android Gradle Plugin and Kotlin are updated by hand. Other updates,
+# including the Gradle wrapper, arrive as pull requests and are checked against the
+# pairing in ADR-0002 (docs/adr/0002-build-toolchain.md).
+# The Gradle version catalog and build files this file watches are in the repository; no build has run yet, and the first CI run checks them.
+# The `uv` entry watches `/ml`, the folder of the Python project. `scripts/` uses the standard library only and has no dependency of its own, so no entry watches it. Which files the `uv` ecosystem reads is checked at the first Dependabot run.
+# The `github-actions` entry watches the workflows in .github/workflows. Each action is pinned by full commit id with its release in a comment on the same line, so that Dependabot can update the comment with the pin; how it reads a pinned action is checked at the first Dependabot run. The `ci(deps)` prefix uses a type from the list in CONTRIBUTING.md.
+# The weekly schedule, the limit of five open pull requests and the grouping are project choices; no standard covers them.
+# The names under `ignore` are the ones gradle/libs.versions.toml declares: the library coordinate of the
+# Android Gradle Plugin (com.android.tools.build:gradle), the two Android Gradle Plugin ids the catalog declares
+# (com.android.application and com.android.library, because Dependabot may not match the library coordinate when
+# the catalog names the plugin by its id), the coordinates of the Kotlin Gradle plugin and the Compose compiler plugin
+# (org.jetbrains.kotlin:kotlin-gradle-plugin and org.jetbrains.kotlin:compose-compiler-gradle-plugin), the Kotlin test library (org.jetbrains.kotlin:kotlin-test), and the Kotlin
+# plugin ids org.jetbrains.kotlin.jvm and org.jetbrains.kotlin.plugin.compose. How Dependabot reads a plugin id is
+# checked at the first Dependabot run (GitHub documentation, "Dependabot options reference", `ignore`).
+# Enforcement: the hosting service reads this file once the repository is published; each update arrives as a pull request and is reviewed like any other.
+version: 2
+updates:
+  - package-ecosystem: "gradle"
+    directory: "/"
+    target-branch: "dev"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "build(deps)"
+    groups:
+      androidx:
+        patterns:
+          - "androidx.*"
+    ignore:
+      - dependency-name: "com.android.tools.build:gradle"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "com.android.application"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "com.android.library"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "org.jetbrains.kotlin:kotlin-gradle-plugin"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "org.jetbrains.kotlin:compose-compiler-gradle-plugin"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "org.jetbrains.kotlin.jvm"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "org.jetbrains.kotlin.plugin.compose"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "org.jetbrains.kotlin:kotlin-test"
+        update-types: ["version-update:semver-major"]
+  - package-ecosystem: "uv"
+    directory: "/ml"
+    target-branch: "dev"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "build(deps)"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    target-branch: "dev"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "ci(deps)"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
