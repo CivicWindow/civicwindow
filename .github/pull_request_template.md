@@ -6,7 +6,7 @@ Refs #
 
 ## Branch and baseline
 
-- Branch: `feature/<n>-<short-name>` or `fix/<n>-<short-name>`. `<n>` is the issue number, or a local `L` number until a tracker exists (provisional).
+- Branch: `feature/<n>-<short-name>` or `fix/<n>-<short-name>`. `<n>` is the ticket's `L` id, such as `L320`; the issue number goes under "Linked issue" above (provisional).
 - Baseline: the short commit id of the `dev` commit this branch was cut from (provisional).
 - Goes into: the role branch, or `dev` for an integration or update, or `main` for a hotfix.
 - Update PR only: applicability checked for each change, and unfinished work kept.
