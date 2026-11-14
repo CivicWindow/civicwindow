@@ -45,7 +45,7 @@ Commit messages follow [Conventional Commits 1.0.0](https://www.conventionalcomm
 - **summary** is imperative, lower case, without a full stop; the whole first line is at most 72 characters. No standard covers this summary rule; it is the project's choice.
 - **body** says what changed and why, wrapped at 72 characters (a common Git practice; no standard covers this), after one blank line.
 - **A breaking change** puts `!` before the colon and adds a `BREAKING CHANGE:` line in the footer. A breaking change to a shared contract or schema also needs an architecture decision record ([schema and contract versioning](governance/SCHEMA_VERSIONING.md)).
-- **Issue link:** a commit may end with `Refs #<n>`, using the issue number, or the local ticket number until a tracker exists (no standard covers this); nothing else links a commit to an issue. The closing keyword (`Closes #<n>`) is written only in the integration pull request into `dev`, as the [branching policy](governance/BRANCHING_POLICY.md) says. This adds no rule to the branching policy.
+- **Issue link:** a commit may end with `Refs #<issue number>`, the number of the ticket's GitHub issue (no standard covers this); nothing else links a commit to an issue. The closing keyword (`Closes #<issue number>`) is written only in the integration pull request into `dev`, as the [branching policy](governance/BRANCHING_POLICY.md) says. This adds no rule to the branching policy.
 
 Example:
 
